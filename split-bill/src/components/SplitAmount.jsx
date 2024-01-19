@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./Button";
 
 export const SplitAmount = ({ showSelectedFriend, splitAmount }) => {
-  const [bill, setBill] = useState(0);
+  const [bill, setBill] = useState("");
   const [paidByuser, setPaid] = useState("");
   const [whoIsPaying, setWhoIsPaying] = useState("user");
   const expence = bill ? bill - paidByuser : "";

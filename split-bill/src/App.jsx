@@ -71,6 +71,7 @@ function App() {
         <SplitAmount
           showSelectedFriend={showSelectedFriend}
           splitAmount={splitAmount}
+          key={showSelectedFriend.id}
         />
       )}
     </div>
