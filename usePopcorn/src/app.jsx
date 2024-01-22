@@ -47,43 +47,54 @@ const tempWatchedData = [
   },
 ];
 export function App() {
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
   return (
     <>
-      <NavBar />
+      <NavBar movies={movies}>
+        <Search />
+      </NavBar>
       <Main>
         <Box>
-          <MovieLists />
+          <MovieLists movies={movies} />
         </Box>
         <Box>
-          <WatchedSummary />
-          <WatchedMoviesLists />
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesLists watched={watched} />
         </Box>
       </Main>
     </>
   );
 }
 
-const NavBar = () => {
+const NavBar = ({ children, movies }) => {
   return (
-    <div className="flex flex-row justify-between sm:m-4 items-center px-4 sm:px-10 py-2 bg-indigo-600 rounded-xl shadow-xl gap-2 text-xs sm:text-md">
+    <div className="flex flex-row justify-between sm:m-4 xl:mx-12 items-center px-4 sm:px-10 py-2 bg-indigo-600 rounded-xl shadow-xl gap-2 text-xs sm:text-md">
       <div className="flex sm:flex-row flex-col justify-center items-center gap-2">
         <span>🍿</span>
         <h1 className="sm:text-2xl font-bold">MoviePicker</h1>
       </div>
-      <input
-        className="px-4 py-2 rounded-md hover:-translate-y-1 transition-all text-indigo-100 font-semibold border-none  md:min-w-[30rem] shadow-md w-[150px]  focus:outline-none  bg-indigo-500"
-        placeholder="Search Movies "
-      />
+      {children}
       <p className="font-bold">
-        Found <strong>X</strong> results
+        Found <strong>{movies.length}</strong> results
       </p>
     </div>
   );
 };
-
+const Search = () => {
+  const [query, setQuery] = useState("");
+  return (
+    <input
+      className="px-4 py-2 rounded-md hover:-translate-y-1 transition-all text-indigo-100 font-semibold border-none  md:min-w-[30rem] shadow-md w-[150px]  focus:outline-none  bg-indigo-500"
+      placeholder="Search Movies "
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+    />
+  );
+};
 const Main = ({ children }) => {
   return (
-    <main className="mt-8  h-[70vh] flex sm:flex-row flex-col gap-2 sm:w-[700px] mx-auto">
+    <main className="mt-8  h-[75vh] flex sm:flex-row flex-col gap-2 sm:w-[700px] xl:w-[900px] mx-auto">
       {children}
     </main>
   );
@@ -105,10 +116,10 @@ const Box = ({ children }) => {
   );
 };
 
-const MovieLists = () => {
+const MovieLists = ({ movies }) => {
   return (
     <ul className="">
-      {tempMovieData?.map((movie) => (
+      {movies?.map((movie) => (
         <Movie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
@@ -119,7 +130,7 @@ const Movie = ({ movie }) => {
   return (
     <li
       key={movie.imdbID}
-      className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 border-gray-600"
+      className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 transition-all border-b-2 border-gray-600"
     >
       <img
         src={movie.Poster}
@@ -139,66 +150,77 @@ const Movie = ({ movie }) => {
   );
 };
 
-const WatchedSummary = () => {
+const average = (arr) =>
+  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+
+const WatchedSummary = ({ watched }) => {
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
+
   return (
     <div className="p-4 flex flex-col gap-4 bg-gray-900 rounded-xl shadow-xl">
       <h2 className="text-xl font-bold ">Movies you watched</h2>
       <div className="flex justify-around items-center">
         <p className="flex justify-start items-center gap-2">
           <span>#️⃣</span>
-          <span> movies</span>
+          <span>{watched.length} movies</span>
         </p>
         <p className="mini">
           <span>⭐️</span>
-          <span>X</span>
+          <span>{avgImdbRating}</span>
         </p>
         <p className="mini">
           <span>🌟</span>
-          <span>Y</span>
+          <span>{avgUserRating}</span>
         </p>
         <p className="mini">
           <span>⏳</span>
-          <span>Z</span>
+          <span>{avgRuntime}</span>
         </p>
       </div>
     </div>
   );
 };
 
-const WatchedMoviesLists = () => {
+const WatchedMoviesLists = ({ watched }) => {
   return (
     <ul className="">
-      {tempWatchedData.map((movie) => (
-        <li
-          key={movie.imdbID}
-          className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 border-gray-600"
-        >
-          <img
-            src={movie.Poster}
-            alt={`${movie.Title} poster`}
-            className="size-14"
-          />
-          <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-sans leading-6 font-bold">
-              {movie.Title}
-            </h3>
-            <div className="flex gap-2">
-              <p className="mini">
-                <span>⭐️</span>
-                <span>{movie.imdbRating}</span>
-              </p>
-              <p className="mini">
-                <span>🌟</span>
-                <span>{movie.userRating}</span>
-              </p>
-              <p className="mini">
-                <span>⏳</span>
-                <span>{movie.runtime} min</span>
-              </p>
-            </div>
-          </div>
-        </li>
+      {watched.map((movie) => (
+        <WatchedMovie movie={movie} />
       ))}
     </ul>
+  );
+};
+
+const WatchedMovie = ({ movie }) => {
+  return (
+    <li
+      key={movie.imdbID}
+      className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 transition-all border-gray-600"
+    >
+      <img
+        src={movie.Poster}
+        alt={`${movie.Title} poster`}
+        className="size-14"
+      />
+      <div className="flex flex-col gap-2">
+        <h3 className="text-xl font-sans leading-6 font-bold">{movie.Title}</h3>
+        <div className="flex gap-2">
+          <p className="mini">
+            <span>⭐️</span>
+            <span>{movie.imdbRating}</span>
+          </p>
+          <p className="mini">
+            <span>🌟</span>
+            <span>{movie.userRating}</span>
+          </p>
+          <p className="mini">
+            <span>⏳</span>
+            <span>{movie.runtime} min</span>
+          </p>
+        </div>
+      </div>
+    </li>
   );
 };
