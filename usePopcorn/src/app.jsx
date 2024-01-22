@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const tempMovieData = [
   {
@@ -46,18 +46,35 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
+
+const key = "9375fc28";
 export function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isloading, setIsLoading] = useState(false);
+  const querys = "interstellar";
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      setIsLoading(true);
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${key}&s=${querys}`
+      );
+      const data = await res.json();
+      console.log(data);
+      setMovies(data.Search);
+      setIsLoading(false);
+    };
+    fetchMovies();
+  }, []);
+
   return (
     <>
       <NavBar movies={movies}>
         <Search />
       </NavBar>
       <Main>
-        <Box>
-          <MovieLists movies={movies} />
-        </Box>
+        <Box>{isloading ? <Loading /> : <MovieLists movies={movies} />}</Box>
         <Box>
           <WatchedSummary watched={watched} />
           <WatchedMoviesLists watched={watched} />
@@ -66,10 +83,12 @@ export function App() {
     </>
   );
 }
-
+const Loading = () => {
+  return <p className="text-xl text-white font-semibold">...Loading</p>;
+};
 const NavBar = ({ children, movies }) => {
   return (
-    <div className="flex flex-row justify-between sm:m-4 xl:mx-12 items-center px-4 sm:px-10 py-2 bg-indigo-600 rounded-xl shadow-xl gap-2 text-xs sm:text-md">
+    <div className="flex flex-row justify-between sm:m-4 xl:mx-12 items-center px-4 sm:px-10 py-2 bg-indigo-600 rounded-xl shadow-xl gap-2 text-xs md:text-xl">
       <div className="flex sm:flex-row flex-col justify-center items-center gap-2">
         <span>🍿</span>
         <h1 className="sm:text-2xl font-bold">MoviePicker</h1>
