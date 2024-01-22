@@ -49,32 +49,50 @@ const tempWatchedData = [
 
 const key = "9375fc28";
 export function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([tempMovieData]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isloading, setIsLoading] = useState(false);
-  const querys = "interstellar";
+  const [error, setError] = useState("");
+  const querys = "inter";
 
   useEffect(() => {
     const fetchMovies = async () => {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${key}&s=${querys}`
-      );
-      const data = await res.json();
-      console.log(data);
-      setMovies(data.Search);
-      setIsLoading(false);
+      try {
+        console.log("rendering");
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${key}&s=${querys}`
+        );
+
+        if (!res.ok) throw new Error("something wrong with fetching movies");
+
+        const data = await res.json();
+
+        console.log(data);
+
+        setMovies(data.Search);
+      } catch (er) {
+        console.error(er.message);
+        setError(er.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchMovies();
-  }, []);
-
+  }, [querys]);
+  console.log("rendered");
   return (
     <>
       <NavBar movies={movies}>
         <Search />
       </NavBar>
       <Main>
-        <Box>{isloading ? <Loading /> : <MovieLists movies={movies} />}</Box>
+        <Box>
+          {/* {isloading ? <Loading /> : <MovieLists movies={movies} />} */}
+          {isloading && <Loading />}
+          {!isloading && !error && <MovieLists movies={movies} />}
+          {error && <Error message={error} />}
+        </Box>
         <Box>
           <WatchedSummary watched={watched} />
           <WatchedMoviesLists watched={watched} />
@@ -83,6 +101,9 @@ export function App() {
     </>
   );
 }
+const Error = ({ message }) => {
+  return <p className="text-xl font-semibold mt-4 text-center">{message}</p>;
+};
 const Loading = () => {
   return <p className="text-xl text-white font-semibold">...Loading</p>;
 };
@@ -95,7 +116,7 @@ const NavBar = ({ children, movies }) => {
       </div>
       {children}
       <p className="font-bold">
-        Found <strong>{movies.length}</strong> results
+        Founds <strong>{movies?.length}</strong> results
       </p>
     </div>
   );
@@ -130,7 +151,7 @@ const Box = ({ children }) => {
       >
         {isOpen ? "-" : "+"}
       </button>
-      {isOpen && children}
+      {!isOpen && children}
     </div>
   );
 };
@@ -206,7 +227,7 @@ const WatchedMoviesLists = ({ watched }) => {
   return (
     <ul className="">
       {watched.map((movie) => (
-        <WatchedMovie movie={movie} />
+        <WatchedMovie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
   );
@@ -214,10 +235,7 @@ const WatchedMoviesLists = ({ watched }) => {
 
 const WatchedMovie = ({ movie }) => {
   return (
-    <li
-      key={movie.imdbID}
-      className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 transition-all border-gray-600"
-    >
+    <li className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 transition-all border-gray-600">
       <img
         src={movie.Poster}
         alt={`${movie.Title} poster`}
