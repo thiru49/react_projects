@@ -48,60 +48,101 @@ const tempWatchedData = [
 ];
 
 const key = "9375fc28";
+
 export function App() {
+  const [query, setQuery] = useState("sivaji");
   const [movies, setMovies] = useState([tempMovieData]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isloading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const querys = "inter";
+  const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        console.log("rendering");
-        setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${key}&s=${querys}`
-        );
+  useEffect(
+    function () {
+      const fetchMovies = async () => {
+        try {
+          console.log("rendering");
+          setIsLoading(true);
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${key}&s=${query}`
+          );
 
-        if (!res.ok) throw new Error("something wrong with fetching movies");
+          if (!res.ok) throw new Error("something wrong with fetching movies");
 
-        const data = await res.json();
+          const data = await res.json();
 
-        console.log(data);
+          if (data.Response === "False") throw new Error(" movies not found");
 
-        setMovies(data.Search);
-      } catch (er) {
-        console.error(er.message);
-        setError(er.message);
-      } finally {
-        setIsLoading(false);
+          setMovies(data.Search);
+        } catch (er) {
+          setError(er.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        return;
       }
-    };
-    fetchMovies();
-  }, [querys]);
+      fetchMovies();
+    },
+    [query]
+  );
   console.log("rendered");
+  const handleSelectedMovie = (id) => {
+    setSelectedId(id);
+  };
+  const handleWatchedmovies = () => {
+    setSelectedId(null);
+  };
   return (
     <>
       <NavBar movies={movies}>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
       </NavBar>
       <Main>
         <Box>
           {/* {isloading ? <Loading /> : <MovieLists movies={movies} />} */}
           {isloading && <Loading />}
-          {!isloading && !error && <MovieLists movies={movies} />}
-          {error && <Error message={error} />}
+          {!isloading && !error && (
+            <MovieLists movies={movies} onSelectMovie={handleSelectedMovie} />
+          )}
+          {error && <Errors message={error} />}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesLists watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              onBack={handleWatchedmovies}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesLists watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
   );
 }
-const Error = ({ message }) => {
+
+const MovieDetails = ({ selectedId, onBack }) => {
+  return (
+    <>
+      <button
+        className="size-8 absolute left-2 top-2 bg-white text-black rounded-full"
+        onClick={onBack}
+      >
+        {"<-"}
+      </button>
+      <p>{selectedId}</p>;
+    </>
+  );
+};
+
+const Errors = ({ message }) => {
   return <p className="text-xl font-semibold mt-4 text-center">{message}</p>;
 };
 const Loading = () => {
@@ -116,13 +157,12 @@ const NavBar = ({ children, movies }) => {
       </div>
       {children}
       <p className="font-bold">
-        Founds <strong>{movies?.length}</strong> results
+        Founds <strong>{movies?.length}</strong> result
       </p>
     </div>
   );
 };
-const Search = () => {
-  const [query, setQuery] = useState("");
+const Search = ({ query, setQuery }) => {
   return (
     <input
       className="px-4 py-2 rounded-md hover:-translate-y-1 transition-all text-indigo-100 font-semibold border-none  md:min-w-[30rem] shadow-md w-[150px]  focus:outline-none  bg-indigo-500"
@@ -156,21 +196,22 @@ const Box = ({ children }) => {
   );
 };
 
-const MovieLists = ({ movies }) => {
+const MovieLists = ({ movies, onSelectMovie }) => {
   return (
     <ul className="">
       {movies?.map((movie) => (
-        <Movie movie={movie} key={movie.imdbID} />
+        <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
       ))}
     </ul>
   );
 };
 
-const Movie = ({ movie }) => {
+const Movie = ({ movie, onSelectMovie }) => {
   return (
     <li
       key={movie.imdbID}
       className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 transition-all border-b-2 border-gray-600"
+      onClick={() => onSelectMovie(movie.imdbID)}
     >
       <img
         src={movie.Poster}
