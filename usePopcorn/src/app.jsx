@@ -51,7 +51,7 @@ const tempWatchedData = [
 const key = "9375fc28";
 
 export function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isloading, setIsLoading] = useState(false);
@@ -63,7 +63,6 @@ export function App() {
       const controller = new AbortController();
       const fetchMovies = async () => {
         try {
-          console.log("query Details");
           setIsLoading(true);
           const res = await fetch(
             `http://www.omdbapi.com/?apikey=${key}&s=${query}`,
@@ -90,6 +89,7 @@ export function App() {
         setError("");
         return;
       }
+      handleCloseMovie();
       fetchMovies();
       return () => {
         controller.abort();
@@ -188,6 +188,19 @@ const MovieDetails = ({
       document.title = "MoviePicker";
     };
   }, [title]);
+
+  useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Escape") {
+        onCloseMovie();
+        console.log("closing");
+      }
+    };
+    document.addEventListener("keydown", callback);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [onCloseMovie]);
 
   const handleAdd = () => {
     const newMovie = {
