@@ -177,6 +177,9 @@ const MovieDetails = ({
     console.log("rendering");
     if (!title) return;
     document.title = `Movie | ${title}`;
+    return () => {
+      document.title = "MoviePicker";
+    };
   }, [title]);
 
   const handleAdd = () => {
