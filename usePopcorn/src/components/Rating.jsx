@@ -1,8 +1,10 @@
-const Rating = () => {
+import { useState } from "react";
+
+export const Rating = () => {
   const [value, setValue] = useState(0);
   const [mouse, setMouse] = useState(0);
   return (
-    <div className="m-4 flex items-center">
+    <div className="m-2 flex items-center justify-center">
       {Array.from({ length: 10 }, (_, i) => (
         <Rate
           key={i + 1}
@@ -13,7 +15,9 @@ const Rating = () => {
         />
       ))}
 
-      <p className="ml-4 text-xl">{mouse || value || ""}</p>
+      <p className="ml-2 text-xl text-bold text-yellow-400">
+        {mouse || value || ""}
+      </p>
     </div>
   );
 };
@@ -22,19 +26,42 @@ const Rate = ({ rating, full, onMoveon, onMoveOff }) => {
   return (
     <>
       {full ? (
-        <div
-          className="size-5 bg-yellow-300 mr-1"
+        <svg
+          class="size-8 text-yellow-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
           onClick={rating}
           onMouseEnter={onMoveon}
           onMouseLeave={onMoveOff}
-        ></div>
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+            d="M9.05 11.293l-3.316 2.053.558-3.254L3.5 7.36l3.263-.474L9.05 3.5l1.447 3.386 3.263.474-2.397 2.732.558 3.254-3.316-2.053z"
+          ></path>
+        </svg>
       ) : (
-        <div
-          className="size-5 bg-black mr-1"
+        <svg
+          class="size-8 text-yello-600"
+          fill="full"
+          stroke="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
           onClick={rating}
           onMouseEnter={onMoveon}
           onMouseLeave={onMoveOff}
-        ></div>
+        >
+          <path
+            className=""
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1"
+            d="M9.05 11.293l-3.316 2.053.558-3.254L3.5 7.36l3.263-.474L9.05 3.5l1.447 3.386 3.263.474-2.397 2.732.558 3.254-3.316-2.053z"
+          ></path>
+        </svg>
       )}
     </>
   );

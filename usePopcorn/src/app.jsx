@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Rating } from "./components/Rating";
 
 const tempMovieData = [
   {
@@ -61,7 +62,7 @@ export function App() {
     function () {
       const fetchMovies = async () => {
         try {
-          console.log("rendering");
+          console.log("query Details");
           setIsLoading(true);
           const res = await fetch(
             `http://www.omdbapi.com/?apikey=${key}&s=${query}`
@@ -91,7 +92,7 @@ export function App() {
   );
   console.log("rendered");
   const handleSelectedMovie = (id) => {
-    setSelectedId(id);
+    setSelectedId((selectedId) => (selectedId === id ? null : id));
   };
   const handleWatchedmovies = () => {
     setSelectedId(null);
@@ -129,15 +130,78 @@ export function App() {
 }
 
 const MovieDetails = ({ selectedId, onBack }) => {
+  const [movie, setMovie] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actor: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
+
+  useEffect(() => {
+    const getMovieDetails = async () => {
+      setLoading(true);
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${key}&i=${selectedId}`
+      );
+      const data = await res.json();
+      console.log(data);
+      setMovie(data);
+      setLoading(false);
+    };
+    getMovieDetails();
+  }, [selectedId]);
   return (
     <>
-      <button
-        className="size-8 absolute left-2 top-2 bg-white text-black rounded-full"
-        onClick={onBack}
-      >
-        {"<-"}
-      </button>
-      <p>{selectedId}</p>;
+      {isLoading ? (
+        <p className="text-xl text-center">...Loading</p>
+      ) : (
+        <div>
+          <header className="flex gap-4 bg-gray-800 shadow-md">
+            <button
+              className="size-8 absolute left-2 top-2 bg-white text-black rounded-full "
+              onClick={onBack}
+            >
+              &larr;
+            </button>
+            <img
+              src={poster}
+              alt={`Poster of ${movie} movie`}
+              className="aspect-auto size-1/3 sm:size-3/2 "
+            />
+            <div className="basis 1/2 flex flex-col justify-center items-center gap-2 text-sm sm:text-md">
+              <h2 className=" text-xl font-bold">{title}</h2>
+              <p className="">
+                {released} &bull; {runtime}
+              </p>
+              <p className="text-center">{genre}</p>
+              <p>
+                <span>⭐️</span>
+                <span className="font-bold sm:text-xl">{imdbRating}</span> IMDB
+                rating
+              </p>
+            </div>
+          </header>
+          <section className="flex flex-col justify-center items-center gap-2 p-4">
+            <div className="p-2 bg-gray-800 mt-2 mx-2 rounded-xl shadow-xl">
+              <Rating />
+            </div>
+
+            <p className="leading-4 text-md">
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </div>
+      )}
     </>
   );
 };
@@ -174,7 +238,7 @@ const Search = ({ query, setQuery }) => {
 };
 const Main = ({ children }) => {
   return (
-    <main className="mt-8  h-[75vh] flex sm:flex-row flex-col gap-2 sm:w-[700px] xl:w-[900px] mx-auto">
+    <main className="mt-8  h-[75vh] flex sm:flex-row flex-col gap-2 sm:w-[800px] xl:w-[900px] mx-auto">
       {children}
     </main>
   );
