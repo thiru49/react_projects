@@ -173,6 +173,12 @@ const MovieDetails = ({
     getMovieDetails();
   }, [selectedId]);
 
+  useEffect(() => {
+    console.log("rendering");
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+  }, [title]);
+
   const handleAdd = () => {
     const newMovie = {
       imdbId: selectedId,
