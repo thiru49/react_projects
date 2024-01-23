@@ -1,8 +1,10 @@
 import { useState } from "react";
 
-export const Rating = () => {
-  const [value, setValue] = useState(0);
+export const Rating = ({ defalutRating = 0, onsetRating }) => {
+  const [value, setValue] = useState(defalutRating);
   const [mouse, setMouse] = useState(0);
+  onsetRating(value || mouse || "");
+
   return (
     <div className="m-2 flex items-center justify-center">
       {Array.from({ length: 10 }, (_, i) => (

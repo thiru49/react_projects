@@ -51,9 +51,9 @@ const tempWatchedData = [
 const key = "9375fc28";
 
 export function App() {
-  const [query, setQuery] = useState("sivaji");
-  const [movies, setMovies] = useState([tempMovieData]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [query, setQuery] = useState("inception");
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
   const [isloading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
@@ -94,8 +94,12 @@ export function App() {
   const handleSelectedMovie = (id) => {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
   };
-  const handleWatchedmovies = () => {
+  const handleCloseMovie = () => {
     setSelectedId(null);
+  };
+  const handleAddWatched = (movie) => {
+    setWatched((watched) => [...watched, movie]);
+    console.log(watched);
   };
   return (
     <>
@@ -115,7 +119,10 @@ export function App() {
           {selectedId ? (
             <MovieDetails
               selectedId={selectedId}
-              onBack={handleWatchedmovies}
+              onBack={handleCloseMovie}
+              onAddOnMovie={handleAddWatched}
+              onCloseMovie={handleCloseMovie}
+              watched={watched}
             />
           ) : (
             <>
@@ -129,9 +136,16 @@ export function App() {
   );
 }
 
-const MovieDetails = ({ selectedId, onBack }) => {
+const MovieDetails = ({
+  selectedId,
+  onBack,
+  onAddOnMovie,
+  onCloseMovie,
+  watched,
+}) => {
   const [movie, setMovie] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
   const {
     Title: title,
     Year: year,
@@ -158,6 +172,26 @@ const MovieDetails = ({ selectedId, onBack }) => {
     };
     getMovieDetails();
   }, [selectedId]);
+
+  const handleAdd = () => {
+    const newMovie = {
+      imdbId: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: !isNaN(imdbRating) ? Number(imdbRating) : 0,
+      runtime: !isNaN(runtime) ? Number(runtime.split(" ").at(0)) : 0,
+      userRating: !isNaN(userRating) ? Number(userRating) : 0,
+    };
+    onAddOnMovie(newMovie);
+    onCloseMovie();
+  };
+  const onWatched = watched.map((movie) => movie.imdbId).includes(selectedId);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbId === selectedId
+  )?.userRating;
+
+  console.log(watchedUserRating);
   return (
     <>
       {isLoading ? (
@@ -191,7 +225,24 @@ const MovieDetails = ({ selectedId, onBack }) => {
           </header>
           <section className="flex flex-col justify-center items-center gap-2 p-4">
             <div className="p-2 bg-gray-800 mt-2 mx-2 rounded-xl shadow-xl">
-              <Rating />
+              {!onWatched ? (
+                <>
+                  <Rating onsetRating={setUserRating} />
+                  {userRating > 0 && (
+                    <button
+                      className="bg-purple-700 px-6 rounded-md mx-20 text-[16px] hover:scale-[0.8] py-2 transition-all"
+                      onClick={handleAdd}
+                    >
+                      Add to Lists
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p className="p-4 sm:text-xl font-bold">
+                  You rated with movie <span>⭐️</span>
+                  {watchedUserRating}
+                </p>
+              )}
             </div>
 
             <p className="leading-4 text-md">
@@ -299,9 +350,10 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const WatchedSummary = ({ watched }) => {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
+  console.log(watched);
+  const avgImdbRating = average(watched.map((movie) => movie?.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie?.userRating));
+  const avgRuntime = average(watched.map((movie) => movie?.runtime));
 
   return (
     <div className="p-4 flex flex-col gap-4 bg-gray-900 rounded-xl shadow-xl">
@@ -313,15 +365,15 @@ const WatchedSummary = ({ watched }) => {
         </p>
         <p className="mini">
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p className="mini">
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p className="mini">
           <span>⏳</span>
-          <span>{avgRuntime}</span>
+          <span>{avgRuntime.toFixed(2)}</span>
         </p>
       </div>
     </div>
@@ -342,13 +394,13 @@ const WatchedMovie = ({ movie }) => {
   return (
     <li className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 transition-all border-gray-600">
       <img
-        src={movie.Poster}
-        alt={`${movie.Title} poster`}
+        src={movie.poster}
+        alt={`${movie.title} poster`}
         className="size-14"
       />
       <div className="flex flex-col gap-2">
         <h3 className="text-xl font-sans leading-6 font-bold">{movie.Title}</h3>
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-end">
           <p className="mini">
             <span>⭐️</span>
             <span>{movie.imdbRating}</span>
@@ -361,6 +413,7 @@ const WatchedMovie = ({ movie }) => {
             <span>⏳</span>
             <span>{movie.runtime} min</span>
           </p>
+          <button className="bg-red-600 p-1 rounded-sm mx-8">X</button>
         </div>
       </div>
     </li>
