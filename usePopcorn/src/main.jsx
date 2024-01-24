@@ -5,9 +5,13 @@ import './index.css' */
 
 render(
   <>
-    <StarRating maxRates={5} />
-    <StarRating maxRates={10} />
-    <StarRating />
+    <StarRating
+      maxRating={5}
+      size={25}
+      color="red"
+      messages={["good", "bad", "honest", "extreme", "fine"]}
+    />
+    <StarRating maxRating={10} />
   </>,
   document.getElementById("app")
 );
