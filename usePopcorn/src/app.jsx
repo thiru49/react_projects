@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Rating } from "./components/Rating";
 
 const key = "9375fc28";
@@ -275,12 +275,28 @@ const NavBar = ({ children, movies }) => {
   );
 };
 const Search = ({ query, setQuery }) => {
+  const inputE1 = useRef(null);
+  //listening enter event in dom
+  useEffect(() => {
+    function callback(e) {
+      if (document.activeElement === inputE1.current) return;
+      if (e.code === "Enter") {
+        inputE1.current.focus();
+        setQuery("");
+      }
+    }
+
+    document.addEventListener("keydown", callback);
+    return () => document.addEventListener("keydown", callback);
+  }, [setQuery]);
+
   return (
     <input
       className="px-4 py-2 rounded-md hover:-translate-y-1 transition-all text-indigo-100 font-semibold border-none  md:min-w-[30rem] shadow-md w-[150px]  focus:outline-none  bg-indigo-500"
       placeholder="Search Movies "
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputE1}
     />
   );
 };
