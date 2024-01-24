@@ -1,62 +1,20 @@
 import { useState, useEffect } from "react";
 import { Rating } from "./components/Rating";
 
-const tempMovieData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-];
-
-const tempWatchedData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: "tt0088763",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
-
 const key = "9375fc28";
 
 export function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+
   const [isloading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+
+  const [watched, setWatched] = useState(() => {
+    const data = localStorage.getItem("watched");
+    return JSON.parse(data);
+  });
 
   useEffect(
     function () {
@@ -97,7 +55,11 @@ export function App() {
     },
     [query]
   );
-  console.log("rendered");
+
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
+
   const handleSelectedMovie = (id) => {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
   };
@@ -107,6 +69,9 @@ export function App() {
   const handleAddWatched = (movie) => {
     setWatched((watched) => [...watched, movie]);
     console.log(watched);
+  };
+  const handleDeleteWatched = (id) => {
+    setWatched((watched) => watched.filter((movie) => movie.imdbId !== id));
   };
   return (
     <>
@@ -134,7 +99,10 @@ export function App() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesLists watched={watched} />
+              <WatchedMoviesLists
+                watched={watched}
+                onDelete={handleDeleteWatched}
+              />
             </>
           )}
         </Box>
@@ -173,7 +141,7 @@ const MovieDetails = ({
         `http://www.omdbapi.com/?apikey=${key}&i=${selectedId}`
       );
       const data = await res.json();
-      console.log(data);
+
       setMovie(data);
       setLoading(false);
     };
@@ -379,7 +347,6 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const WatchedSummary = ({ watched }) => {
-  console.log(watched);
   const avgImdbRating = average(watched.map((movie) => movie?.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie?.userRating));
   const avgRuntime = average(watched.map((movie) => movie?.runtime));
@@ -409,17 +376,17 @@ const WatchedSummary = ({ watched }) => {
   );
 };
 
-const WatchedMoviesLists = ({ watched }) => {
+const WatchedMoviesLists = ({ watched, onDelete }) => {
   return (
     <ul className="">
       {watched.map((movie) => (
-        <WatchedMovie movie={movie} key={movie.imdbID} />
+        <WatchedMovie movie={movie} key={movie.imdbId} onDelete={onDelete} />
       ))}
     </ul>
   );
 };
 
-const WatchedMovie = ({ movie }) => {
+const WatchedMovie = ({ movie, onDelete }) => {
   return (
     <li className="flex justify-start gap-8 px-4 py-4 items-center hover:bg-gray-600 border-b-2 transition-all border-gray-600">
       <img
@@ -442,7 +409,12 @@ const WatchedMovie = ({ movie }) => {
             <span>⏳</span>
             <span>{movie.runtime} min</span>
           </p>
-          <button className="bg-red-600 p-1 rounded-sm mx-8">X</button>
+          <button
+            className=" bg-red-600 p-1 rounded-sm mx-8"
+            onClick={() => onDelete(movie.imdbId)}
+          >
+            X
+          </button>
         </div>
       </div>
     </li>
