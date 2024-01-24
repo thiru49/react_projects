@@ -1,64 +1,17 @@
 import { useState, useEffect, useRef } from "react";
-import { Rating } from "./components/Rating";
+import StarRating from "./components/StarRating";
+
+import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const key = "9375fc28";
 
 export function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-
-  const [isloading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { movies, isloading, error } = useMovies(query);
+  const [watched, setWatched] = useLocalStorageState([], "watched");
   const [selectedId, setSelectedId] = useState(null);
-
-  const [watched, setWatched] = useState(() => {
-    const data = localStorage.getItem("watched");
-    return data ? JSON.parse(data) : [];
-  });
-  console.log(watched);
-  useEffect(
-    function () {
-      const controller = new AbortController();
-      const fetchMovies = async () => {
-        try {
-          setIsLoading(true);
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${key}&s=${query}`,
-            { signal: controller.signal }
-          );
-
-          if (!res.ok) throw new Error("something wrong with fetching movies");
-
-          const data = await res.json();
-
-          if (data.Response === "False") throw new Error(" movies not found");
-
-          setMovies(data.Search);
-        } catch (er) {
-          if (er.name !== "AbortError") {
-            setError(er.message);
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
-      handleCloseMovie();
-      fetchMovies();
-      return () => {
-        controller.abort();
-      };
-    },
-    [query]
-  );
-
-  useEffect(() => {
-    localStorage.setItem("watched", JSON.stringify(watched));
-  }, [watched]);
 
   const handleSelectedMovie = (id) => {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
@@ -95,6 +48,7 @@ export function App() {
               onAddOnMovie={handleAddWatched}
               onCloseMovie={handleCloseMovie}
               watched={watched}
+              onEditRating={handleDeleteWatched}
             />
           ) : (
             <>
@@ -117,6 +71,7 @@ const MovieDetails = ({
   onAddOnMovie,
   onCloseMovie,
   watched,
+  onEditRating,
 }) => {
   const [movie, setMovie] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -159,7 +114,6 @@ const MovieDetails = ({
   }, [selectedId]);
 
   useEffect(() => {
-    console.log("rendering");
     if (!title) return;
     document.title = `Movie | ${title}`;
     return () => {
@@ -167,18 +121,7 @@ const MovieDetails = ({
     };
   }, [title]);
 
-  useEffect(() => {
-    const callback = (e) => {
-      if (e.code === "Escape") {
-        onCloseMovie();
-        console.log("closing");
-      }
-    };
-    document.addEventListener("keydown", callback);
-    return () => {
-      document.removeEventListener("keydown", callback);
-    };
-  }, [onCloseMovie]);
+  useKey("Escape", onCloseMovie);
 
   const handleAdd = () => {
     const newMovie = {
@@ -235,7 +178,12 @@ const MovieDetails = ({
             <div className="p-2 bg-gray-800 mt-2 mx-2 rounded-xl shadow-xl">
               {!onWatched ? (
                 <>
-                  <Rating onsetRating={setUserRating} />
+                  <StarRating
+                    onSetRating={setUserRating}
+                    size={24}
+                    maxRating={10}
+                    className="p-4"
+                  />
                   {userRating > 0 && (
                     <button
                       className="bg-purple-700 px-6 rounded-md mx-20 text-[16px] hover:scale-[0.8] py-2 transition-all"
@@ -249,6 +197,12 @@ const MovieDetails = ({
                 <p className="p-4 sm:text-xl font-bold">
                   You rated with movie <span>⭐️</span>
                   {watchedUserRating}
+                  <button
+                    className="text-xs rounded-sm bg-purple-500 p-1 m-2"
+                    onClick={() => onEditRating(selectedId)}
+                  >
+                    Edit
+                  </button>
                 </p>
               )}
             </div>
@@ -288,18 +242,11 @@ const NavBar = ({ children, movies }) => {
 const Search = ({ query, setQuery }) => {
   const inputE1 = useRef(null);
   //listening enter event in dom
-  useEffect(() => {
-    function callback(e) {
-      if (document.activeElement === inputE1.current) return;
-      if (e.code === "Enter") {
-        inputE1.current.focus();
-        setQuery("");
-      }
-    }
-
-    document.addEventListener("keydown", callback);
-    return () => document.addEventListener("keydown", callback);
-  }, [setQuery]);
+  useKey("enter", () => {
+    if (document.activeElement === inputE1.current) return;
+    inputE1.current.focus();
+    setQuery("");
+  });
 
   return (
     <input
