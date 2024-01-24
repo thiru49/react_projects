@@ -13,9 +13,9 @@ export function App() {
 
   const [watched, setWatched] = useState(() => {
     const data = localStorage.getItem("watched");
-    return JSON.parse(data);
+    return data ? JSON.parse(data) : [];
   });
-
+  console.log(watched);
   useEffect(
     function () {
       const controller = new AbortController();
@@ -121,6 +121,16 @@ const MovieDetails = ({
   const [movie, setMovie] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+
+  const countRef = useRef(0);
+
+  useEffect(
+    function () {
+      if (userRating) countRef.current = countRef.current + 1;
+    },
+    [userRating]
+  );
+
   const {
     Title: title,
     Year: year,
@@ -179,7 +189,9 @@ const MovieDetails = ({
       imdbRating: !isNaN(imdbRating) ? Number(imdbRating) : 0,
       runtime: !isNaN(runtime) ? Number(runtime.split(" ").at(0)) : 0,
       userRating: !isNaN(userRating) ? Number(userRating) : 0,
+      CounterRatingDecision: countRef.current,
     };
+    console.log(newMovie);
     onAddOnMovie(newMovie);
     onCloseMovie();
   };
@@ -188,7 +200,6 @@ const MovieDetails = ({
     (movie) => movie.imdbId === selectedId
   )?.userRating;
 
-  console.log(watchedUserRating);
   return (
     <>
       {isLoading ? (
