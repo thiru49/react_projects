@@ -1,9 +1,12 @@
 import { useState } from "react";
+import DateCounter from "./components/DateCounter";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <div>welcome</div>;
+  return (
+    <>
+      <DateCounter />
+    </>
+  );
 }
 
 export default App;
