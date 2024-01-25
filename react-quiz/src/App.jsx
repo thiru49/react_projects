@@ -11,6 +11,8 @@ const initialState = {
   //'loading,'error','ready','active','finished'
   status: "loading",
   index: 0, //accessing the question
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -21,13 +23,24 @@ function reducer(state, action) {
       return { ...state, status: "error" };
     case "start":
       return { ...state, status: "active" };
+    case "newAnswer":
+      const question = state.questions.at(state.index);
+      console.log(question);
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          question.correctOption === action.payload
+            ? state.points + question.points
+            : state.points,
+      };
     default:
       throw new Error("action unknown");
   }
 }
 
 function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -50,7 +63,13 @@ function App() {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Questions questions={questions[index]} />}
+        {status === "active" && (
+          <Questions
+            questions={questions[index]}
+            answer={answer}
+            dispatch={dispatch}
+          />
+        )}
       </Main>
     </div>
   );
