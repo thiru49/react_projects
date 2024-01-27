@@ -10,6 +10,7 @@ import AppLayout from "./pages/AppLayout";
 import CityList from "./components/CityList";
 import { useEffect } from "react";
 import CountryList from "./components/CountryList";
+import City from "./components/City";
 
 const BaseUrl = "http://localhost:8000";
 
@@ -48,6 +49,7 @@ function App() {
               path="cities"
               element={<CityList isLoading={isLoading} cityList={city} />}
             />
+            <Route path="cities/:id" element={<City />} />
             <Route
               path="countries"
               element={<CountryList cityList={city} isLoading={isLoading} />}
