@@ -10,10 +10,13 @@ const formatDate = (date) => {
   }).format(new Date(date));
 };
 function CityItem({ city }) {
-  const { cityName, emoji, date, id } = city;
+  const { cityName, emoji, date, id, position } = city;
   return (
     <li>
-      <Link className={Styles.cityItem} to={`${id}`}>
+      <Link
+        className={Styles.cityItem}
+        to={`${id}?lat=${position.lat}&lng=${position.lng}`}
+      >
         <span className={Styles.emoji}>{emoji}</span>
         <h3 className={Styles.name}>{cityName}</h3>
         <time className={Styles.date}>{formatDate(date)}</time>
