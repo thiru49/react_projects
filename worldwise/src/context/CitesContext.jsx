@@ -1,7 +1,8 @@
+import { useContext } from "react";
 import { Children } from "react";
 import { createContext, useState, useEffect } from "react";
 
-const BaseUrl = "http://localhost:8000";
+const BaseUrl = "http://localhost:4000";
 
 const CitesContext = createContext();
 
@@ -29,5 +30,10 @@ const CitesProvider = ({ children }) => {
     </CitesContext.Provider>
   );
 };
-
-export { CitesProvider };
+const useCites = () => {
+  const context = useContext(CitesContext);
+  if (!context)
+    throw new Error("cites context was called outside of the Provider");
+  return context;
+};
+export { CitesProvider, useCites };

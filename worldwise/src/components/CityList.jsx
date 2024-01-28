@@ -1,9 +1,14 @@
 import React from "react";
+import { useCites } from "../context/CitesContext";
+
 import Styles from "./City.module.css";
+
 import CityItem from "./CityItems";
 import Spinner from "./Spinner";
 import Message from "./Message";
-const CityList = ({ cityList, isLoading }) => {
+
+const CityList = () => {
+  const { city: cityList, isLoading } = useCites();
   if (isLoading) return <Spinner />;
   if (!cityList.length)
     return (
