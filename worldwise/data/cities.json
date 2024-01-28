@@ -1,40 +1,76 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
+      "cityName": "Chennai",
+      "country": "India",
+      "emoji": "🇮🇳",
       "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
+      "notes": "Capital city of Tamil Nadu",
       "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
+        "lat": 13.0827,
+        "lng": 80.2707
       },
       "id": 73930385
     },
     {
-      "cityName": "Madrid",
-      "country": "Spain",
-      "emoji": "🇪🇸",
+      "cityName": "Coimbatore",
+      "country": "India",
+      "emoji": "🇮🇳",
       "date": "2027-07-15T08:22:53.976Z",
-      "notes": "",
+      "notes": "Educational and industrial hub",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
+        "lat": 11.0168,
+        "lng": 76.9558
       },
       "id": 17806751
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
+      "cityName": "Madurai",
+      "country": "India",
+      "emoji": "🇮🇳",
       "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "notes": "Famous for Meenakshi Temple",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
+        "lat": 9.9252,
+        "lng": 78.1198
       },
       "id": 98443197
+    },
+    {
+      "cityName": "Trichy",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2027-11-20T11:45:30.210Z",
+      "notes": "Historical city with Rock Fort",
+      "position": {
+        "lat": 10.7905,
+        "lng": 78.7047
+      },
+      "id": 12567894
+    },
+    {
+      "cityName": "Salem",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2027-08-05T14:37:02.511Z",
+      "notes": "Known for steel and mangoes",
+      "position": {
+        "lat": 11.6643,
+        "lng": 78.146
+      },
+      "id": 23784561
+    },
+    {
+      "cityName": "Erode",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2027-03-18T07:12:45.932Z",
+      "notes": "Famous for textile and turmeric",
+      "position": {
+        "lat": 11.341,
+        "lng": 77.7172
+      },
+      "id": 38592013
     }
   ]
 }
