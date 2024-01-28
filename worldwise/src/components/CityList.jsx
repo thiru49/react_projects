@@ -1,7 +1,7 @@
 import React from "react";
 import { useCites } from "../context/CitesContext";
 
-import Styles from "./City.module.css";
+import Styles from "./CityList.module.css";
 
 import CityItem from "./CityItems";
 import Spinner from "./Spinner";
@@ -15,7 +15,7 @@ const CityList = () => {
       <Message message="Add your first city by clicking on a city on the map" />
     );
   return (
-    <ul className={Styles.cityList}>
+    <ul className={`${Styles.cityList}`}>
       {cityList.map((city, index) => (
         <CityItem city={city} key={index} />
       ))}
