@@ -8,12 +8,13 @@ import Spinner from "./Spinner";
 import Message from "./Message";
 
 const CityList = () => {
-  const { city: cityList, isLoading } = useCites();
+  const { city: cityList, isLoading, setCity } = useCites();
   if (isLoading) return <Spinner />;
   if (!cityList.length)
     return (
       <Message message="Add your first city by clicking on a city on the map" />
     );
+
   return (
     <ul className={`${Styles.cityList}`}>
       {cityList.map((city, index) => (

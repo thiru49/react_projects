@@ -1,76 +1,26 @@
 {
   "cities": [
     {
-      "cityName": "Chennai",
-      "country": "India",
+      "id": "7747",
+      "cityName": "Dharapuram",
       "emoji": "🇮🇳",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "Capital city of Tamil Nadu",
+      "date": "2024-01-29T09:43:07.590Z",
+      "notes": "nice toplace to see",
       "position": {
-        "lat": 13.0827,
-        "lng": 80.2707
-      },
-      "id": 73930385
+        "lat": "10.854886268472459",
+        "lng": "77.65136718750001"
+      }
     },
     {
-      "cityName": "Coimbatore",
-      "country": "India",
+      "id": "01a0",
+      "cityName": "Narasimharajapura",
       "emoji": "🇮🇳",
-      "date": "2027-07-15T08:22:53.976Z",
-      "notes": "Educational and industrial hub",
+      "date": "2024-01-29T09:45:50.679Z",
+      "notes": "hvhivib",
       "position": {
-        "lat": 11.0168,
-        "lng": 76.9558
-      },
-      "id": 17806751
-    },
-    {
-      "cityName": "Madurai",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Famous for Meenakshi Temple",
-      "position": {
-        "lat": 9.9252,
-        "lng": 78.1198
-      },
-      "id": 98443197
-    },
-    {
-      "cityName": "Trichy",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2027-11-20T11:45:30.210Z",
-      "notes": "Historical city with Rock Fort",
-      "position": {
-        "lat": 10.7905,
-        "lng": 78.7047
-      },
-      "id": 12567894
-    },
-    {
-      "cityName": "Salem",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2027-08-05T14:37:02.511Z",
-      "notes": "Known for steel and mangoes",
-      "position": {
-        "lat": 11.6643,
-        "lng": 78.146
-      },
-      "id": 23784561
-    },
-    {
-      "cityName": "Erode",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2027-03-18T07:12:45.932Z",
-      "notes": "Famous for textile and turmeric",
-      "position": {
-        "lat": 11.341,
-        "lng": 77.7172
-      },
-      "id": 38592013
+        "lat": "13.603278132528756",
+        "lng": "75.56396484375001"
+      }
     }
   ]
 }

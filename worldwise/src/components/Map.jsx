@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -15,19 +15,19 @@ import { useCites } from "../context/CitesContext";
 import { useEffect } from "react";
 import useGeoLocation from "../hook/useGeoLocation";
 import Button from "./Button";
+import { useUrlPosition } from "../hook/useUrlPosition";
 
 const Map = () => {
   const { city } = useCites();
   const [mapPosition, setPosition] = useState([10, 78]);
-  const [searchParms] = useSearchParams();
+
   const {
     position: geoLocationPosition,
     isLoading: isLoadingPosition,
     getPosition,
   } = useGeoLocation();
-  const maplat = searchParms.get("lat");
-  const maplng = searchParms.get("lng");
-
+  const [maplat, maplng] = useUrlPosition();
+  console.log(maplat);
   useEffect(() => {
     if (maplat && maplng) setPosition([maplat, maplng]);
   }, [maplat, maplng]);
