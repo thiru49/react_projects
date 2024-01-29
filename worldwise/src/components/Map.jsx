@@ -18,7 +18,7 @@ import Button from "./Button";
 import { useUrlPosition } from "../hook/useUrlPosition";
 
 const Map = () => {
-  const { city } = useCites();
+  const { cities } = useCites();
   const [mapPosition, setPosition] = useState([10, 78]);
 
   const {
@@ -53,7 +53,10 @@ const Map = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {city.map((city) => (
+        {/*  <Marker position={mapPosition}>
+          <Popup>currentLoaction</Popup>
+        </Marker> */}
+        {cities?.map((city) => (
           <Marker
             position={[city.position.lat, city.position.lng]}
             key={city.id}

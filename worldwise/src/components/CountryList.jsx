@@ -8,7 +8,7 @@ import Spinner from "./Spinner";
 import Message from "./Message";
 
 const CountryList = () => {
-  const { city: cityList, isLoading } = useCites();
+  const { cities: cityList, isLoading } = useCites();
   if (isLoading) return <Spinner />;
   if (!cityList?.length)
     return (

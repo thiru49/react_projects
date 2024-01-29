@@ -16,7 +16,6 @@ const formatDate = (date) =>
 function City() {
   const { currentCity, getCity } = useCites();
   const { id } = useParams();
-  const [searchParms, setSearchParms] = useSearchParams();
 
   useEffect(() => {
     getCity(id);
