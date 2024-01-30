@@ -46,7 +46,7 @@ const AuthProvider = ({ children }) => {
         },
       });
   };
-  const logout = (email, password) => {
+  const logout = () => {
     dispatch({ type: "logout" });
   };
   return (
