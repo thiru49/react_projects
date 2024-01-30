@@ -1,6 +1,6 @@
-import { useContext, useReducer } from "react";
+import { useContext, useReducer, createContext } from "react";
 
-const AuthContext = useContext();
+const AuthContext = createContext();
 
 const initialState = {
   user: null,
@@ -32,7 +32,7 @@ const reducer = (state, action) => {
 };
 const AuthProvider = ({ children }) => {
   const [{ user, isAuthenticated }, dispatch] = useReducer(
-    action,
+    reducer,
     initialState
   );
 
