@@ -10,7 +10,7 @@ export const Form = ({ onAddItems }) => {
     const newItem = { description, quantity, packed: false, id: Date.now() };
     onAddItems(newItem);
     setDes("");
-    quantity(1);
+    setQuantity(1);
   };
   return (
     <form
