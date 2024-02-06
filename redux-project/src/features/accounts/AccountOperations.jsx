@@ -8,7 +8,7 @@ function AccountOperations() {
   const [loanAmount, setLoanAmount] = useState("");
   const [loanPurpose, setLoanPurpose] = useState("");
   const [currency, setCurrency] = useState("USD");
-
+  const [boolen, setboolen] = useState(false);
   const dispatch = useDispatch();
   const {
     loan,
@@ -17,11 +17,12 @@ function AccountOperations() {
   } = useSelector((state) => state.account);
 
   function handleDeposit() {
-    if (!depositAmount) return;
+    setboolen(!boolen);
+    /*  if (!depositAmount) return;
     dispatch(deposit(depositAmount, currency));
 
     setDepositAmount("");
-    setCurrency("USD");
+    setCurrency("USD"); */
   }
 
   function handleWithdrawal() {
@@ -55,6 +56,7 @@ function AccountOperations() {
           <select
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
+            disabled={boolen}
           >
             <option value="USD">US Dollar</option>
             <option value="EUR">Euro</option>
