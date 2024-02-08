@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useRouteError } from "react-router-dom";
 
 function NotFound() {
   const navigate = useNavigate();
+  const error = useRouteError();
+  console.log(error);
 
   return (
     <div>
