@@ -6,6 +6,6 @@ export default {
       pizza: "Roboto Mono,monospace",
     },
     extend: {},
+    plugins: [],
   },
-  plugins: [],
 };
