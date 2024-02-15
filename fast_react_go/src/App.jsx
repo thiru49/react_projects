@@ -1,6 +1,5 @@
-import { useState } from "react";
-
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
 import Home from "./ui/Home";
 import Cart from "./features/cart/Cart";
 import Menu, { loader as menuloader } from "./features/menu/Menu";
@@ -10,6 +9,7 @@ import CreateOrder, {
 import Order, { loader as orderloader } from "./features/order/Order";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
+
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
