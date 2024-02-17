@@ -8,6 +8,7 @@ import {
   formatDate,
 } from "../../utilis/helpers";
 import OrderItem from "./OrderItem";
+import UpdateOrder from "./UpdateOrder";
 /* const order = {
   id: "ABCDEF",
   customer: "Jonas",
@@ -110,6 +111,7 @@ function Order() {
         {priority && <p>Price priority: {formatCurrency(priorityPrice)}</p>}
         <p>To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
       </div>
+      {!priority && <UpdateOrder />}
     </div>
   );
 }

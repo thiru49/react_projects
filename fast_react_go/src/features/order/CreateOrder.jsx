@@ -169,7 +169,7 @@ export async function action({ request }) {
     priority: data.priority === "true",
   };
   console.log(order);
-  /* const errors = {};
+  const errors = {};
   if (!isValidPhone(order.phone))
     errors.phone =
       "Please give us your correct phone number.we might need it to contact you";
@@ -177,8 +177,7 @@ export async function action({ request }) {
 
   const newOrder = await createOrder(order);
   store.dispatch(clearCart());
-  return redirect(`/order/${newOrder.id}`); */
-  return null;
+  return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;
