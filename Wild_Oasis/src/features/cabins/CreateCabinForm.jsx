@@ -11,12 +11,12 @@ import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm() {
-  const queryClient = useQueryClient();
   const { register, handleSubmit, reset, getValues, formState } = useForm();
-
   const { errors } = formState;
-  console.log(errors);
-  const { mutate, isLoading } = useMutation({
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending: isCreating } = useMutation({
     mutationFn: createCabin,
     onSuccess: () => {
       toast.success("New cabin successfully created");
@@ -27,9 +27,10 @@ function CreateCabinForm() {
     },
     onError: (err) => toast.error(err.message),
   });
+  console.log(`creating:${isCreating}`);
 
   const onSubmit = (data) => {
-    mutate(data);
+    mutate({ ...data, image: data.image[0] });
   };
 
   return (
@@ -38,7 +39,7 @@ function CreateCabinForm() {
         <Input
           type="text"
           id="name"
-          disabled={isLoading}
+          disabled={isCreating}
           {...register("name", {
             required: "The Field is required",
           })}
@@ -49,7 +50,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="maxCapacity"
-          disabled={isLoading}
+          disabled={isCreating}
           {...register("maxCapacity", {
             required: "The field is required",
             min: {
@@ -64,7 +65,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
-          disabled={isLoading}
+          disabled={isCreating}
           {...register("regularPrice", {
             required: "The Field is required",
             min: {
@@ -79,7 +80,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="discount"
-          disabled={isLoading}
+          disabled={isCreating}
           defaultValue={0}
           {...register("discount", {
             required: "The Field is required",
@@ -97,7 +98,7 @@ function CreateCabinForm() {
         <Textarea
           type="number"
           id="description"
-          disabled={isLoading}
+          disabled={isCreating}
           defaultValue=""
           {...register("description", {
             required: "The Field is required",
@@ -108,7 +109,7 @@ function CreateCabinForm() {
       <FormRow label="Cabin photo">
         <FileInput
           id="image"
-          disabled={isLoading}
+          disabled={isCreating}
           accept="image/*"
           {...register("image")}
         />
@@ -116,10 +117,10 @@ function CreateCabinForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset" disabled={isLoading}>
+        <Button variation="secondary" type="reset" disabled={isCreating}>
           Cancel
         </Button>
-        <Button disabled={isLoading}>Edit cabin</Button>
+        <Button disabled={isCreating}>Add cabin</Button>
       </FormRow>
     </Form>
   );
