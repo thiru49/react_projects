@@ -3,7 +3,21 @@ import React, { useState } from "react";
 import Button from "../../ui/Button";
 import Model from "../../ui/Modal";
 import CreateCabinForm from "./CreateCabinForm";
+
 const AddCabin = () => {
+  return (
+    <Model>
+      <Model.Open opens="add-new-cabin">
+        <Button>Add New Cabin</Button>
+      </Model.Open>
+      <Model.Window name="add-new-cabin">
+        <CreateCabinForm />
+      </Model.Window>
+    </Model>
+  );
+};
+
+/* const AddCabin = () => {
   const [isOpenModel, setIsOpenModel] = useState(false);
   return (
     <div>
@@ -17,6 +31,6 @@ const AddCabin = () => {
       )}
     </div>
   );
-};
+}; */
 
 export default AddCabin;
