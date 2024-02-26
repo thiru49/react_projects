@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-
+import Model from "../../ui/Modal";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -69,34 +70,42 @@ function CabinRow({ cabin }) {
     });
   };
   return (
-    <>
-      <TableRow role="row">
-        <Img src={image} alt={name} />
-        <Cabin>{name}</Cabin>
-        <div>
-          Fits up to tp {maxCapacity} <span>guests</span>
-        </div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{formatCurrency(discount)}</Discount>
-        <div>
-          <button onClick={handleDuplicate} disabled={isCreating}>
-            <HiSquare2Stack />
-          </button>
-          <button
-            onClick={() => setShowEdit((show) => !show)}
-            disabled={isPending}
-          >
-            <HiPencil />
-          </button>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isPending}>
-            <HiTrash />
-          </button>
-        </div>
-      </TableRow>
-      {showEdit && (
-        <CreateCabinForm cabinToEdit={cabin} setShowEdit={setShowEdit} />
-      )}
-    </>
+    <TableRow role="row">
+      <Img src={image} alt={name} />
+      <Cabin>{name}</Cabin>
+      <div>
+        Fits up to tp {maxCapacity} <span>guests</span>
+      </div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <Discount>{formatCurrency(discount)}</Discount>
+      <div>
+        <button onClick={handleDuplicate} disabled={isCreating}>
+          <HiSquare2Stack />
+        </button>
+        <Model>
+          <Model.Open opens="edit">
+            <button>
+              <HiPencil />
+            </button>
+          </Model.Open>
+          <Model.Window name="edit">
+            <CreateCabinForm cabinToEdit={cabin} />
+          </Model.Window>
+          <Model.Open>
+            <button>
+              <HiTrash />
+            </button>
+          </Model.Open>
+          <Model.Window>
+            <ConfirmDelete
+              resourceName="cabins"
+              disabled={isPending}
+              onConfirm={() => deleteCabin(cabinId)}
+            />
+          </Model.Window>
+        </Model>
+      </div>
+    </TableRow>
   );
 }
 
