@@ -7,8 +7,9 @@ import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import Table from "../../ui/Table";
 
-const TableRow = styled.div`
+/* const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
@@ -18,7 +19,7 @@ const TableRow = styled.div`
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
-`;
+`; */
 
 const Img = styled.img`
   display: block;
@@ -70,7 +71,7 @@ function CabinRow({ cabin }) {
     });
   };
   return (
-    <TableRow role="row">
+    <Table.Row>
       <Img src={image} alt={name} />
       <Cabin>{name}</Cabin>
       <div>
@@ -91,12 +92,12 @@ function CabinRow({ cabin }) {
           <Model.Window name="edit">
             <CreateCabinForm cabinToEdit={cabin} />
           </Model.Window>
-          <Model.Open>
+          <Model.Open opens="delete">
             <button>
               <HiTrash />
             </button>
           </Model.Open>
-          <Model.Window>
+          <Model.Window name="delete">
             <ConfirmDelete
               resourceName="cabins"
               disabled={isPending}
@@ -105,7 +106,7 @@ function CabinRow({ cabin }) {
           </Model.Window>
         </Model>
       </div>
-    </TableRow>
+    </Table.Row>
   );
 }
 
