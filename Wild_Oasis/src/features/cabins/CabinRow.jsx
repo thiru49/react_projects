@@ -8,6 +8,7 @@ import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
+import Menus from "../../ui/Menus";
 
 /* const TableRow = styled.div`
   display: grid;
@@ -80,30 +81,31 @@ function CabinRow({ cabin }) {
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
       <div>
-        <button onClick={handleDuplicate} disabled={isCreating}>
-          <HiSquare2Stack />
-        </button>
         <Model>
-          <Model.Open opens="edit">
-            <button>
-              <HiPencil />
-            </button>
-          </Model.Open>
-          <Model.Window name="edit">
-            <CreateCabinForm cabinToEdit={cabin} />
-          </Model.Window>
-          <Model.Open opens="delete">
-            <button>
-              <HiTrash />
-            </button>
-          </Model.Open>
-          <Model.Window name="delete">
-            <ConfirmDelete
-              resourceName="cabins"
-              disabled={isPending}
-              onConfirm={() => deleteCabin(cabinId)}
-            />
-          </Model.Window>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinId} />
+            <Menus.List id={cabinId}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+                Duplicate
+              </Menus.Button>
+              <Model.Open opens="edit">
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Model.Open>
+              <Model.Open opens="delete">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Model.Open>
+            </Menus.List>
+            <Model.Window name="edit">
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Model.Window>
+            <Model.Window name="delete">
+              <ConfirmDelete
+                resourceName="cabins"
+                disabled={isPending}
+                onConfirm={() => deleteCabin(cabinId)}
+              />
+            </Model.Window>
+          </Menus.Menu>
         </Model>
       </div>
     </Table.Row>

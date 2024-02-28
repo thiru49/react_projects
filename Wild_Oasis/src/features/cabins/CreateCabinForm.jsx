@@ -145,7 +145,9 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModel }) {
           type="reset"
           disabled={isWorkable}
           onClick={() => {
-            isEditSession ? setShowEdit((pre) => !pre) : onCloseModel?.();
+            if (isEditSession) {
+              onCloseModel?.();
+            }
           }}
         >
           Cancel

@@ -83,8 +83,8 @@ const Row = ({ children }) => {
     </StyledRow>
   );
 };
-const Body = ({ children }) => {
-  return <></>;
+const Body = ({ data, render }) => {
+  return <StyledBody>{data.map(render)}</StyledBody>;
 };
 
 Table.Header = Header;
