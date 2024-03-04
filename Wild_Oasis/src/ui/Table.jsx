@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { render } from "react-dom";
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -41,7 +42,7 @@ const StyledBody = styled.section`
   margin: 0.4rem 0;
 `;
 
-const Footer = styled.footer`
+const StyledFooter = styled.footer`
   background-color: var(--color-grey-50);
   display: flex;
   justify-content: center;
@@ -85,6 +86,10 @@ const Row = ({ children }) => {
 };
 const Body = ({ data, render }) => {
   return <StyledBody>{data.map(render)}</StyledBody>;
+};
+
+const Footer = ({ children }) => {
+  return <StyledFooter>{children}</StyledFooter>;
 };
 
 Table.Header = Header;
