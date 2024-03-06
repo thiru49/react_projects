@@ -11,11 +11,13 @@ import ButtonText from "../../ui/ButtonText";
 import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "./useBooking";
 import Spinner from "../../ui/Spinner";
-import { HiArrowDownOnSquare } from "react-icons/hi2";
+import { HiArrowDownOnSquare, HiTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router";
-import useCheckin from "../check-in-out/useCheckin";
-import useCheckout from "../check-in-out/useCheckout";
 
+import useCheckout from "../check-in-out/useCheckout";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Model from "../../ui/Modal";
+import { useDeleteBooking } from "./useDeleteBooking";
 const HeadingGroup = styled.div`
   display: flex;
   gap: 2.4rem;
@@ -29,6 +31,7 @@ function BookingDetail() {
   const navigate = useNavigate();
 
   const { checkout, isCheckigOut } = useCheckout();
+  const { deletebooking, isPending } = useDeleteBooking();
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -69,6 +72,22 @@ function BookingDetail() {
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
+        <Model>
+          <Model.Open opens="deleteBooking">
+            <Button icon={<HiTrash />}>delete Booking</Button>
+          </Model.Open>
+          <Model.Window name="deleteBooking">
+            <ConfirmDelete
+              resourceName="booking"
+              onConfirm={() =>
+                deletebooking(id, {
+                  onSettled: () => navigate(-1),
+                })
+              }
+              disabled={isPending}
+            />
+          </Model.Window>
+        </Model>
       </ButtonGroup>
     </>
   );

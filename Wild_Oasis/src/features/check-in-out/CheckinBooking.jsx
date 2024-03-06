@@ -30,6 +30,7 @@ function CheckinBooking() {
 
   const { booking, isLoading } = useBooking();
   const { checkin, isCheckingIn } = useCheckin();
+
   const { settings, isLoading: isLoadingSettings } = useSettings();
   const moveBack = useMoveBack();
 
@@ -45,8 +46,10 @@ function CheckinBooking() {
     hasBreakfast,
     numNights,
   } = booking;
+
   const optionalBreakFast =
     settings.breakfastPrice * numGuests * numNights || 0;
+
   function handleCheckin() {
     if (!confirmPaid) return;
     addBreakfast
