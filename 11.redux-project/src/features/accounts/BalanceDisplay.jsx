@@ -10,7 +10,72 @@ function formatCurrency(value) {
 function BalanceDisplay() {
   const balance = useSelector((state) => state.account.balance);
 
-  return <div className="balance">{formatCurrency(balance)}</div>;
+  return <div className="balance">
+    {formatCurrency(balance)}
+    </div>;
 }
 
+function convertStringToInt(string) {
+  
+  const numbers = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    ten: 10,
+    eleven: 11,
+    twelve: 12,
+    thirteen: 13,
+    fourteen: 14,
+    fifteen: 15,
+    sixteen: 16,
+    seventeen: 17,
+    eighteen: 18,
+    nineteen: 19,
+    twenty: 20,
+    thirty: 30,
+    forty: 40,
+    fifty: 50,
+    sixty: 60,
+    seventy: 70,
+    eighty: 80,
+    ninety: 90,
+    hundred: 100,
+    thousand: 1000,
+    million: 1000000,
+  };
+
+  const words = string.replace(/-/g, ' ').replace(/ and /g, ' ').split(' ');
+
+  let result = 0;
+  let currentNumber = 0;
+
+  for (const word of words) {
+    if (word === 'million') {
+      result += currentNumber * 1000000;
+      currentNumber = 0;
+    } else if (word === 'thousand') {
+      result += currentNumber * 1000;
+      currentNumber = 0;
+    } else if (word === 'hundred') {
+      currentNumber *= 100;
+    } else {
+      currentNumber += numbers[word];
+    }
+  }
+
+  result += currentNumber;
+  return result;
+}
+
+console.log(convertStringToInt("one"));  // Output: 1
+console.log(convertStringToInt("twenty"));  // Output: 20
+console.log(convertStringToInt("two hundred forty-six"));  // Output: 246
+console.log(convertStringToInt("seven hundred eighty-three thousand nine hundred and nineteen"));  // Output: 783919
 export default BalanceDisplay;
