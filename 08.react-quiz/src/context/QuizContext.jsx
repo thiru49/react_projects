@@ -13,7 +13,9 @@ const initialState = {
   highScore: 0,
   secondsRemaining: 10,
 };
+
 const SEC_PER_QUESTION = 30;
+
 function reducer(state, action) {
   switch (action.type) {
     case "dataRecevied":
@@ -65,6 +67,7 @@ function reducer(state, action) {
   }
 }
 const QuizProvider = ({ children }) => {
+
   const [
     { questions, status, index, answer, points, highScore, secondsRemaining },
     dispatch,
@@ -75,6 +78,7 @@ const QuizProvider = ({ children }) => {
       .then((data) => dispatch({ type: "dataRecevied", payload: data }))
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
+
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((acc, cur) => acc + cur.points, 0);
   return (

@@ -46,7 +46,9 @@ export const { withdraw, requestLoan, payLoan } = accountSlice.actions;
 export default accountSlice.reducer;
 
 export function deposit(amount, currency) {
+  
   if (currency === "USD") return { type: "account/deposit", payload: amount };
+
   return async function (dispatch, getState) {
     dispatch({ type: "account/convertingCurrency" });
     const res = await fetch(

@@ -18,11 +18,11 @@ function AccountOperations() {
 
   function handleDeposit() {
     setboolen(!boolen);
-    /*  if (!depositAmount) return;
+    if (!depositAmount) return;
     dispatch(deposit(depositAmount, currency));
 
     setDepositAmount("");
-    setCurrency("USD"); */
+    setCurrency("USD"); 
   }
 
   function handleWithdrawal() {
