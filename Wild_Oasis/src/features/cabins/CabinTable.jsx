@@ -26,6 +26,7 @@ const TableHeader = styled.header`
 const CabinTable = () => {
   const { isLoading, cabins, error } = useCabin();
   const [searchParams] = useSearchParams();
+  console.log(cabins);
   if (isLoading) return <Spinner />;
   if (!cabins) return <Empty />;
   // filter by discount
@@ -46,7 +47,7 @@ const CabinTable = () => {
   const sortedCabin = filteredCabin?.sort(
     (a, b) => (a[field] - b[field]) * modifier
   );
-  console.log(sortedCabin, field);
+  
   return (
     <Menus>
       <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
