@@ -65,6 +65,7 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModel }) {
             required: "The Field is required",
           })}
         />
+        <p>{errors?.name?.message}</p>
       </FormRow>
 
       <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
