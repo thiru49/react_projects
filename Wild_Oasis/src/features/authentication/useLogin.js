@@ -13,10 +13,10 @@ const useLogin = () => {
     onSuccess: (user) => {
       queryClient.setQueriesData(['user'],user)
       toast.success("user SuccessFully login");
-      navigate("/dashboard");
+      navigate("/dashboard",{replace:true});
     },
     onError: (err) => {
-      toast.error(`erron on login${err}`);
+      toast.error(`error on login${err}`);
     },
   });
   return { login, isPending };
