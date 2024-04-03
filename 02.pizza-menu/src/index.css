@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -21,4 +21,41 @@ body {
   min-height: 100vh;
   padding: 3.2rem;
   padding-bottom: 6rem;
+}
+ */
+ * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container{
+  border:2px solid red;
+  height: 100vh;
+  width: 80vw;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 200px 3fr;
+  grid-template-rows: 100px 3fr;
+}
+
+.header{
+  background-color: red;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.sidebar{
+  background-color: blue;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+.main{
+  background-color: yellow;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
 }

@@ -3,6 +3,7 @@ import AddCabin from "../features/cabins/AddCabin";
 import CabinTable from "../features/cabins/CabinTable";
 import Row from "../ui/Row";
 import CabinTableOperation from "../features/cabins/CabinTableOperation";
+
 function Cabins() {
   return (
     <>

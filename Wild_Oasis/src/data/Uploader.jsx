@@ -107,13 +107,13 @@ function Uploader() {
     setIsLoading(true);
     // Bookings need to be deleted FIRST
     await deleteBookings();
-    await deleteGuests();
+    await deleteGuests(); 
     await deleteCabins();
 
     // Bookings need to be created LAST
     await createGuests();
     await createCabins();
-    await createBookings();
+    await createBookings(); 
 
     setIsLoading(false);
   }

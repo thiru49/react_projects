@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deposit, payLoan, requestLoan, withdraw } from "./accountSlice";
 
 function AccountOperations() {
+
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
@@ -10,6 +11,7 @@ function AccountOperations() {
   const [currency, setCurrency] = useState("USD");
   const [boolen, setboolen] = useState(false);
   const dispatch = useDispatch();
+
   const {
     loan,
     loanPurpose: purpose,
@@ -51,7 +53,7 @@ function AccountOperations() {
           <input
             type="number"
             value={depositAmount}
-            onChange={(e) => setDepositAmount(+e.target.value)}
+            onChange={(e) => setDepositAmount(e.target.value)}
           />
           <select
             value={currency}

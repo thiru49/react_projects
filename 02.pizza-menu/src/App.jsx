@@ -5,10 +5,19 @@ import Menu from "./components/Menu";
 
 function App() {
   return (
-    <div className="bg-slate-100 ">
-      <Header />
+    <div className="bg-slate-100 container">
+      {/* <Header />
       <Menu />
-      <Footer />
+      <Footer /> */}
+      <div className="header">
+
+      </div>
+      <div className="main">
+
+      </div>
+      <div className="sidebar">
+
+      </div>
     </div>
   );
 }
