@@ -32,8 +32,9 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<ProtectedRoute>
-            <AppLayout />
+          <Route element={
+            <ProtectedRoute>
+              <AppLayout />
             </ProtectedRoute>}>
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
