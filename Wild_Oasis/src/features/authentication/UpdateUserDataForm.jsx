@@ -5,18 +5,21 @@ import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import useUser from "./useUser";
 
-import { useUser } from "./useUser";
+
 
 function UpdateUserDataForm() {
   // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
   const {
-    user: {
+   user:{user: {
       email,
       user_metadata: { fullName: currentFullName },
-    },
-  } = useUser();
-
+    }}
+     
+    
+  } = useUser()
+ 
   const [fullName, setFullName] = useState(currentFullName);
   const [avatar, setAvatar] = useState(null);
 
@@ -25,6 +28,7 @@ function UpdateUserDataForm() {
   }
 
   return (
+    
     <Form onSubmit={handleSubmit}>
       <FormRow label="Email address">
         <Input value={email} disabled />
@@ -50,7 +54,8 @@ function UpdateUserDataForm() {
         </Button>
         <Button>Update account</Button>
       </FormRow>
-    </Form>
+    </Form> 
+   
   );
 }
 
