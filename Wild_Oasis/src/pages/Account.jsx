@@ -1,6 +1,7 @@
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
-import UpdateUserDateFrom from '../features/authentication/UpdateUserDataForm'
+import UpdateUserDateForm from '../features/authentication/UpdateUserDataForm'
+import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
 function Account() {
   return (
     <>
@@ -8,12 +9,12 @@ function Account() {
 
       <Row>
         <Heading as="h3">Update user data</Heading>
-        <UpdateUserDateFrom/>
+        <UpdateUserDateForm/>
       </Row>
 
       <Row>
         <Heading as="h3">Update password</Heading>
-        <p>Update user password form</p>
+        <UpdatePasswordForm/>
       </Row>
     </>
   );

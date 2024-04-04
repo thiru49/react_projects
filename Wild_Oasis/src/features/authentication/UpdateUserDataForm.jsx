@@ -6,6 +6,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import useUser from "./useUser";
+import { useUpdateUser } from "./useUpdateUser";
 
 
 
@@ -19,12 +20,22 @@ function UpdateUserDataForm() {
      
     
   } = useUser()
- 
+   const {updateUser,isPending} = useUpdateUser()
   const [fullName, setFullName] = useState(currentFullName);
   const [avatar, setAvatar] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
+    updateUser({fullName,avatar},{
+      onSuccess:()=>{
+        setAvatar(null),
+        e.target.reset()
+      }
+    })
+  }
+  function handleClear(e) {
+    setFullName(currentFullName)
+    setAvatar(null)
   }
 
   return (
@@ -39,6 +50,7 @@ function UpdateUserDataForm() {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           id="fullName"
+          disabled={isPending}
         />
       </FormRow>
       <FormRow label="Avatar image">
@@ -46,13 +58,14 @@ function UpdateUserDataForm() {
           id="avatar"
           accept="image/*"
           onChange={(e) => setAvatar(e.target.files[0])}
+          disabled={isPending}
         />
       </FormRow>
       <FormRow>
-        <Button type="reset" variation="secondary">
+        <Button type="reset" variation="secondary" disabled={isPending} onClick={handleClear}>
           Cancel
         </Button>
-        <Button>Update account</Button>
+        <Button disabled={isPending}>Update account</Button>
       </FormRow>
     </Form> 
    
