@@ -6,7 +6,8 @@ import { subDays } from "date-fns"
 
 const useRecentBooking = () => {
     const [searchParams] = useSearchParams()
-    const numDays = !searchParams.get('last') ? '7' : Number(searchParams.get('last'));
+    const numDays = !searchParams.get('last') ? 7 : Number(searchParams.get('last'));
+    console.log(typeof new Date(),new Date())
     const queryDate = subDays(new Date(),numDays).toISOString()
     const {isLoading,data:bookings}=useQuery({
         queryFn:()=>getBookingsAfterDate(queryDate),

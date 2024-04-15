@@ -27,7 +27,7 @@ const StyledNavLink = styled(NavLink)`
     font-weight: 500;
     padding: 1.2rem 2.4rem;
     transition: all 0.3s;
-  }
+  } 
 
   /* This works because react-router places the active class on the active NavLink */
   &:hover,
@@ -38,7 +38,11 @@ const StyledNavLink = styled(NavLink)`
     background-color: var(--color-grey-50);
     border-radius: var(--border-radius-sm);
   }
-
+ /*  &.active {
+    box-shadow:var(--shadow-xl);
+    background-color: var(--color-grey-100);
+    border: 2px solid var(--color-grey-400);
+  } */
   & svg {
     width: 2.4rem;
     height: 2.4rem;

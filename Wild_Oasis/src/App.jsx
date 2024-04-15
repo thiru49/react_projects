@@ -25,7 +25,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
 function App() {
   return (
     <DarkModeProvider>
@@ -51,7 +50,7 @@ function App() {
           </Route>
           <Route path="login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
-        </Routes>
+        </Routes> 
       </BrowserRouter>
       <Toaster
         position="top-center"
@@ -70,6 +69,7 @@ function App() {
         }}
       />
     </QueryClientProvider>
+
   </DarkModeProvider>
   );
 }
